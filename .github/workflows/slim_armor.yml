@@ -1,6 +1,6 @@
 # This is a basic workflow that is manually triggered
 
-name: Build for x86 without docker
+name: Build with default profile - "slim"
 
 
 on:
