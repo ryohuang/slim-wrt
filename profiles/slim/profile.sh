@@ -1,0 +1,4 @@
+#!/bin/bash
+
+SLIM_CFG_TARGET="x86"
+SLIM_CFG_ARCH="64"

@@ -1,0 +1,3 @@
+[submodule "slimapps/application/luci-theme-argon"]
+	path = slimapps/application/luci-theme-argon
+	url = https://github.com/jerrykuku/luci-theme-argon.git

@@ -1,0 +1,10 @@
+#!/bin/sh
+
+logger boostupnp "uci-default"
+
+test -f /etc/crontabs/root || touch /etc/crontabs/root
+grep -q "boostupnp.sh" /etc/crontabs/root || echo "*/5 * * * *	/usr/sbin/boostupnp.sh" >> /etc/crontabs/root
+/etc/init.d/cron restart
+
+rm -f /tmp/luci-indexcache
+exit 0
