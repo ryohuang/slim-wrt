@@ -1,0 +1,41 @@
+# This is a basic workflow that is manually triggered
+
+name: Test upload multi assets
+
+
+on:
+  release:
+    types: [published, created, edited]
+  push:
+    tags: ["v*"]
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  publish_armor:
+    runs-on: ubuntu-20.04
+    strategy:
+      matrix:
+        slim_profile: ['slim', 'r1cl']
+
+    steps:
+    - name: Start job for profiles
+      run: echo "Profile  ${{ matrix.slim_profile }}"
+
+    - uses: actions/checkout@v2
+      with:
+        repository: 'ryohuang/slim-wrt'
+        path: 'slim-wrt'
+
+    - name: Create release
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: |
+        set -x
+        assets=()
+        for asset in $GITHUB_WORKSPACE/slim-wrt/fakeimages/${{ matrix.slim_profile }}/*; do
+          echo "Found asset -- $asset"
+          assets+=("-a" "$asset")
+        done
+        tag_name="${GITHUB_REF##*/}"
+        hub release create "${assets[@]}" -m "$tag_name" "$tag_name"
+      
