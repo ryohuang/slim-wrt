@@ -26,16 +26,11 @@ jobs:
         repository: 'ryohuang/slim-wrt'
         path: 'slim-wrt'
 
-    - name: Create release
+    - uses: xresloader/upload-to-github-release@v1
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      run: |
-        set -x
-        assets=()
-        for asset in $GITHUB_WORKSPACE/slim-wrt/fakeimages/${{ matrix.slim_profile }}/*; do
-          echo "Found asset -- $asset"
-          assets+=("-a" "$asset")
-        done
-        tag_name="${GITHUB_REF##*/}"
-        hub release create "${assets[@]}" -m "$tag_name" "$tag_name"
+      with:
+        file: "$GITHUB_WORKSPACE/slim-wrt/fakeimages/${{ matrix.slim_profile }}/*;"
+        tags: true
+        draft: true
       
