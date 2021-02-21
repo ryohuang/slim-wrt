@@ -4,16 +4,9 @@ name: Build with default profile - "slim"
 
 
 on:
-  workflow_dispatch:
-    # Inputs the workflow accepts.
-    inputs:
-      name:
-        # Friendly description to be shown in the UI instead of 'name'
-        description: 'Person to greet'
-        # Default value if no value is explicitly provided
-        default: 'World'
-        # Input has to be provided for the workflow to run
-        required: true
+  release:
+    types: [published, created, edited]
+  push:
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
@@ -36,7 +29,7 @@ jobs:
         sudo apt-get install -qqy --no-install-recommends build-essential asciidoc binutils bzip2 gawk gettext git libncurses5-dev libz-dev patch unzip zlib1g-dev lib32gcc1 libc6-dev-i386 subversion flex uglifyjs git-core gcc-multilib p7zip p7zip-full msmtp libssl-dev texinfo npm python-is-python3 ssh-client wget curl file screen && \
         sudo apt-get clean && \
         sudo rm -rf /var/lib/apt/lists/*
-        
+
     - name: Showtime 
       run: |
         cd $GITHUB_WORKSPACE/slim-wrt
