@@ -30,7 +30,7 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-        file: "$GITHUB_WORKSPACE/slim-wrt/fakeimages/${{ matrix.slim_profile }}/*;"
+        file: "./slim-wrt/fakeimages/${{ matrix.slim_profile }}/buildinfo"
         tags: true
         draft: true
       
