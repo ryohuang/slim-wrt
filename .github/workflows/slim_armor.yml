@@ -55,8 +55,9 @@ jobs:
         profile=${{ matrix.slim_profile }}
         cd $GITHUB_WORKSPACE/slim-wrt/images/$profile
         for filename in ./**; do
-          if [[ $filename =~ *"$profile"* ]]; then
-            mv $filename $filename-$profile
+          name=${filename##*/}
+          if echo "$name" | grep -qE "buildinfo|sha256sums"; then
+            mv $name $profile-$name
           fi
         done
 
