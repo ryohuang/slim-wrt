@@ -12,8 +12,13 @@ on:
 jobs:
   build_armor:
     runs-on: ubuntu-20.04
+    strategy:
+      matrix:
+        slim_profile: ['slim', 'r1cl']
 
     steps:
+    - name: Start job for profiles
+      run: echo "Profile  ${{ matrix.slim_profile }}"
 
     - uses: actions/checkout@v2
       with:
@@ -33,19 +38,20 @@ jobs:
     - name: Showtime 
       run: |
         cd $GITHUB_WORKSPACE/slim-wrt
-        echo "build with default profile"
+        SLIM_CFG_PROFILE=${{ matrix.slim_profile }}
+        echo "build with default profile $SLIM_CFG_PROFILE"
         make showtime
         
     - name: Show outputs
       run: |
         df -h
         echo "SHOW IMAGES"
-        ls $GITHUB_WORKSPACE/slim-wrt/images
+        ls $GITHUB_WORKSPACE/slim-wrt/images/${{ matrix.slim_profile }}
         echo "SHOW PACKAGES"
-        ls $GITHUB_WORKSPACE/slim-wrt/ipks
+        ls $GITHUB_WORKSPACE/slim-wrt/ipks/${{ matrix.slim_profile }}
     
 
     - uses: actions/upload-artifact@v2
       with:
-          name: images
-          path: ${{ github.workspace }}/slim-wrt/images/**/*
+          name: ${{ matrix.slim_profile }}-images
+          path: ${{ github.workspace }}/slim-wrt/images/${{ matrix.slim_profile }}/*
