@@ -38,9 +38,8 @@ jobs:
     - name: Showtime 
       run: |
         cd $GITHUB_WORKSPACE/slim-wrt
-        SLIM_CFG_PROFILE=${{ matrix.slim_profile }}
-        echo "build with default profile $SLIM_CFG_PROFILE"
-        make showtime
+        echo "build with profile ${{ matrix.slim_profile }}"
+        make SLIM_CFG_PROFILE=${{ matrix.slim_profile }} showtime
         
     - name: Show outputs
       run: |
