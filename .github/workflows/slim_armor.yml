@@ -49,8 +49,35 @@ jobs:
         echo "SHOW PACKAGES"
         ls $GITHUB_WORKSPACE/slim-wrt/ipks/${{ matrix.slim_profile }}
     
+    - name: Rename build infos
+      run: |
+        set -x
+        profile=${{ matrix.slim_profile }}
+        cd $GITHUB_WORKSPACE/slim-wrt/images/$profile
+        for filename in ./**; do
+          if [[ $filename =~ *"$profile"* ]]; then
+            mv $filename $filename-$profile
+          fi
+        done
+
+    - name: Show outputs after rename 
+      run: |
+        df -h
+        echo "SHOW IMAGES"
+        ls $GITHUB_WORKSPACE/slim-wrt/images/${{ matrix.slim_profile }}
+        echo "SHOW PACKAGES"
+        ls $GITHUB_WORKSPACE/slim-wrt/ipks/${{ matrix.slim_profile }}
 
     - uses: actions/upload-artifact@v2
       with:
           name: ${{ matrix.slim_profile }}-images
           path: ${{ github.workspace }}/slim-wrt/images/${{ matrix.slim_profile }}/*
+
+    - uses: xresloader/upload-to-github-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        file: "./slim-wrt/images/${{ matrix.slim_profile }}/**;./slim-wrt/ipks/${{ matrix.slim_profile }}/**"
+        tags: true
+        draft: true
+        overwrite: true
