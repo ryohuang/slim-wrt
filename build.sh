@@ -27,11 +27,16 @@ load_profile() {
 
 clone_openwrt() {
     # delete download dir for a fresh code base
-    if [ -d $SLIM_CFG_DOWNLOAD_PATH ]
+    if [ -d $SLIM_CFG_DOWNLOAD_PATH/$SLIM_CFG_CLONE_PATH ]
     then
-        rm -rf $SLIM_CFG_DOWNLOAD_PATH
+        rm -rf $SLIM_CFG_DOWNLOAD_PATH/$SLIM_CFG_CLONE_PATH
     fi
-    mkdir $SLIM_CFG_DOWNLOAD_PATH
+
+    if [ ! -d $SLIM_CFG_DOWNLOAD_PATH ]
+    then
+        mkdir $SLIM_CFG_DOWNLOAD_PATH
+    fi
+    
     cd $SLIM_CFG_DOWNLOAD_PATH
     git clone  https://github.com/openwrt/openwrt.git  $SLIM_CFG_CLONE_PATH
     cd $SLIM_CFG_CLONE_PATH
@@ -227,6 +232,7 @@ clear_stage() {
 
 clear_dist() {
     clear_stage
+    rm -rf $SLIM_CFG_TOP_DIR/downloaded
     rm -rf $SLIM_CFG_TOP_DIR/*-src
 }
 
