@@ -36,7 +36,7 @@ clone_openwrt() {
     then
         mkdir $SLIM_CFG_DOWNLOAD_PATH
     fi
-    
+
     cd $SLIM_CFG_DOWNLOAD_PATH
     git clone  https://github.com/openwrt/openwrt.git  $SLIM_CFG_CLONE_PATH
     cd $SLIM_CFG_CLONE_PATH
@@ -75,6 +75,28 @@ list_dirs(){
     echo ${patch_folder_list[@]}
 }
 
+# test it with : bash build.sh clear_patches patch_openwrt
+# arg1: The patch's full path.
+# Echo true, if found in exclude list
+# 
+is_excluded_patch() {
+    rtn="false"
+    if [ -z "$SLIM_CFG_EXCLUDE_PATCH" ]; then
+        rtn="false"
+    else
+        for patch_name in ${SLIM_CFG_EXCLUDE_PATCH[@]}
+        do
+            full_patch_name=$SLIM_CFG_PATCHES_MODULES/$patch_name
+            if [ "$full_patch_name" == "$1" ]
+            then
+                rtn="true"
+                break
+            fi
+        done  
+    fi
+    echo $rtn
+}
+
 patch_openwrt() {
     patch_folder_list=`list_dirs "$SLIM_CFG_PATCHES_MODULES"`
     echo Patches list : ${patch_folder_list[@]}
@@ -83,6 +105,12 @@ patch_openwrt() {
     for i in ${patch_folder_list[@]}
     do
         echo Patch at $i
+        retval=`is_excluded_patch "$i"`
+        if [ "$retval" == "true" ]
+        then
+            echo "Exclude patch $i"
+            continue
+        fi
         if [ -d $i/openwrt ]
         then
             echo Apply patches in $i/openwrt
@@ -98,6 +126,12 @@ patch_feeds() {
     for i in ${patch_folder_list[@]}
     do
         echo ------ Find feed patch in $i ------
+        retval=`is_excluded_patch "$i"`
+        if [ "$retval" == "true" ]
+        then
+            echo "Exclude patch $i"
+            continue
+        fi
         if [ -d $i/feeds ]
         then
             echo ------ Found feed patch in $i/feeds ------
@@ -125,6 +159,12 @@ do_custom_script() {
 
     for i in ${patch_folder_list[@]}
     do
+        retval=`is_excluded_patch "$i"`
+        if [ "$retval" == "true" ]
+        then
+            echo "Exclude patch $i"
+            continue
+        fi
         if [ -f $i/custom.sh ]
         then
             cd $i
