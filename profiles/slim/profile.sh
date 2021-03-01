@@ -14,3 +14,5 @@ echo ${SLIM_CFG_EXCLUDE_PATCH[*]}
 #                         0002-upnp \
 #                         0003-nf-conntrack-max \
 #                         )
+
+export SLIM_FAKE_VERMAGIC=68143adfcb7fc62a239c4be112fe40de

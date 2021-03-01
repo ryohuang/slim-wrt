@@ -38,7 +38,10 @@ clone_openwrt() {
     fi
 
     cd $SLIM_CFG_DOWNLOAD_PATH
-    git clone  https://github.com/openwrt/openwrt.git  $SLIM_CFG_CLONE_PATH
+    if [ ! -d $SLIM_CFG_CLONE_PATH ]
+    then
+        git clone  https://github.com/openwrt/openwrt.git  $SLIM_CFG_CLONE_PATH
+    fi
     cd $SLIM_CFG_CLONE_PATH
     git checkout $SLIM_CFG_OPENWRT_COMMIT
     ./scripts/feeds update -a
@@ -219,7 +222,7 @@ make_it() {
 get_pkg_arch_from_config()
 {
 	config_file_path="$1"
-	cat .config | grep "^CONFIG_TARGET_ARCH_PACKAGES" | sed 's/^.*="\(.*\)"/\1/g'
+	cat $config_file_path | grep "^CONFIG_TARGET_ARCH_PACKAGES" | sed 's/^.*="\(.*\)"/\1/g'
 }
 
 move_built() {

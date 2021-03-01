@@ -1,0 +1,14 @@
+diff --git a/include/kernel-defaults.mk b/include/kernel-defaults.mk
+index cc1e2361be..33da63dc7f 100644
+--- a/include/kernel-defaults.mk
++++ b/include/kernel-defaults.mk
+@@ -106,6 +106,9 @@ define Kernel/Configure/Default
+ 	}
+ 	$(_SINGLE) [ -d $(LINUX_DIR)/user_headers ] || $(KERNEL_MAKE) INSTALL_HDR_PATH=$(LINUX_DIR)/user_headers headers_install
+ 	grep '=[ym]' $(LINUX_DIR)/.config.set | LC_ALL=C sort | mkhash md5 > $(LINUX_DIR)/.vermagic
++	if [ -n $(SLIM_FAKE_VERMAGIC) ]; then \
++		echo $(SLIM_FAKE_VERMAGIC) > $(LINUX_DIR)/.vermagic; \
++	fi
+ endef
+ 
+ define Kernel/Configure/Initramfs
