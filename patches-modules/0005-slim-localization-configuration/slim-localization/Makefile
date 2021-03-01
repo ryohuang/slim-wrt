@@ -28,7 +28,6 @@ define Package/slim-localization
 			 +luci-i18n-base-zh-cn \
 			 +luci-i18n-firewall-zh-cn \
 			 +luci-i18n-upnp-zh-cn \
-			 +luci-i18n-sqm-zh-cn \
 			 +luci-i18n-ttyd-zh-cn
 endef
 
