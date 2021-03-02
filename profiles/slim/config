@@ -12,5 +12,7 @@ CONFIG_PACKAGE_luci-theme-argon=y
 CONFIG_PACKAGE_luci-app-filetransfer=y
 
 CONFIG_FEED_slim=m
+CONFIG_FEED_diskman=m
 
 CONFIG_PACKAGE_slim-localization=y
+CONFIG_PACKAGE_luci-app-diskman=y
