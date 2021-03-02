@@ -3,6 +3,10 @@
 # all the custom scripts will run in their own path.
 echo "Script executed from: ${PWD}"
 
-# Replace SLIM_FAKE_VERMAGIC in the config file.
-sed -i "s/SLIM_FAKE_VERMAGIC/$SLIM_FAKE_VERMAGIC/g" $SLIM_CFG_WORK_PATH/include/kernel-defaults.mk
-
+if [[ ! -z $SLIM_FAKE_VERMAGIC ]]
+then
+    echo "Caution! We will set a fake vermagic now!"
+    OLD='grep.*mkhash md5.*vermagic'
+    NEW="echo $SLIM_FAKE_VERMAGIC > \$(LINUX_DIR)/.vermagic"
+    sed  -i 's@'"$OLD"'@'"$NEW"'@' $SLIM_CFG_WORK_PATH/include/kernel-defaults.mk
+fi
