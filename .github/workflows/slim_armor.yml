@@ -14,7 +14,7 @@ jobs:
     runs-on: ubuntu-20.04
     strategy:
       matrix:
-        slim_profile: ['slim', 'r1cl', 'offical']
+        slim_profile: ['slim', 'r1cl', 'official']
 
     steps:
     - name: Start job for profiles

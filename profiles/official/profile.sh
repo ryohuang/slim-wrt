@@ -5,7 +5,6 @@ SLIM_CFG_ARCH="64"
 
 SLIM_CFG_EXCLUDE_PATCH=(\
                         0000-common-configs \
-                        0001-fullcone-nat \
                         0002-upnp \
                         0003-nf-conntrack-max \
                         0004-workaround-for-realtime-connection-status-crash \
