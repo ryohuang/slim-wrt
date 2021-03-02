@@ -1,0 +1,14 @@
+--- a/package/base-files/Makefile
++++ b/package/base-files/Makefile
+@@ -197,6 +197,11 @@ define Package/base-files/install
+ 		$(VERSION_SED_SCRIPT) $(1)/etc/opkg/distfeeds.conf)
+ 	$(if $(CONFIG_IPK_FILES_CHECKSUMS), \
+ 		rm -f $(1)/sbin/pkg_check,)
++	echo Print distfeeds.conf before
++	cat $(1)/etc/opkg/distfeeds.conf
++	sed -i 's@downloads.openwrt.org@mirror.sjtu.edu.cn/openwrt@g' $(1)/etc/opkg/distfeeds.conf
++	echo Print distfeeds.conf after
++	cat $(1)/etc/opkg/distfeeds.conf
+ endef
+ 
+ ifneq ($(DUMP),1)
