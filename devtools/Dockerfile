@@ -21,7 +21,8 @@ RUN useradd -m ${USER} --uid=${UID} && echo "${USER}:${PW}" | \
       chpasswd
 
 USER ${UID}:${GID}
-WORKDIR /home/${USER}
+RUN mkdir -p /home/${USER}/work
+WORKDIR /home/${USER}/work
 
 # set dummy git config
 RUN git config --global user.name "user" && git config --global user.email "user@example.com"
