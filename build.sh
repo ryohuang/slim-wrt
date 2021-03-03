@@ -27,13 +27,21 @@ load_profile() {
 
 clone_openwrt() {
     # delete download dir for a fresh code base
-    if [ -d $SLIM_CFG_DOWNLOAD_PATH ]
+    if [ -d $SLIM_CFG_DOWNLOAD_PATH/$SLIM_CFG_CLONE_PATH ]
     then
-        rm -rf $SLIM_CFG_DOWNLOAD_PATH
+        rm -rf $SLIM_CFG_DOWNLOAD_PATH/$SLIM_CFG_CLONE_PATH
     fi
-    mkdir $SLIM_CFG_DOWNLOAD_PATH
+
+    if [ ! -d $SLIM_CFG_DOWNLOAD_PATH ]
+    then
+        mkdir $SLIM_CFG_DOWNLOAD_PATH
+    fi
+
     cd $SLIM_CFG_DOWNLOAD_PATH
-    git clone  https://github.com/openwrt/openwrt.git  $SLIM_CFG_CLONE_PATH
+    if [ ! -d $SLIM_CFG_CLONE_PATH ]
+    then
+        git clone  https://github.com/openwrt/openwrt.git  $SLIM_CFG_CLONE_PATH
+    fi
     cd $SLIM_CFG_CLONE_PATH
     git checkout $SLIM_CFG_OPENWRT_COMMIT
     ./scripts/feeds update -a
@@ -70,6 +78,28 @@ list_dirs(){
     echo ${patch_folder_list[@]}
 }
 
+# test it with : bash build.sh clear_patches patch_openwrt
+# arg1: The patch's full path.
+# Echo true, if found in exclude list
+# 
+is_excluded_patch() {
+    rtn="false"
+    if [ -z "$SLIM_CFG_EXCLUDE_PATCH" ]; then
+        rtn="false"
+    else
+        for patch_name in ${SLIM_CFG_EXCLUDE_PATCH[@]}
+        do
+            full_patch_name=$SLIM_CFG_PATCHES_MODULES/$patch_name
+            if [ "$full_patch_name" == "$1" ]
+            then
+                rtn="true"
+                break
+            fi
+        done  
+    fi
+    echo $rtn
+}
+
 patch_openwrt() {
     patch_folder_list=`list_dirs "$SLIM_CFG_PATCHES_MODULES"`
     echo Patches list : ${patch_folder_list[@]}
@@ -78,6 +108,12 @@ patch_openwrt() {
     for i in ${patch_folder_list[@]}
     do
         echo Patch at $i
+        retval=`is_excluded_patch "$i"`
+        if [ "$retval" == "true" ]
+        then
+            echo "Exclude patch $i"
+            continue
+        fi
         if [ -d $i/openwrt ]
         then
             echo Apply patches in $i/openwrt
@@ -93,6 +129,12 @@ patch_feeds() {
     for i in ${patch_folder_list[@]}
     do
         echo ------ Find feed patch in $i ------
+        retval=`is_excluded_patch "$i"`
+        if [ "$retval" == "true" ]
+        then
+            echo "Exclude patch $i"
+            continue
+        fi
         if [ -d $i/feeds ]
         then
             echo ------ Found feed patch in $i/feeds ------
@@ -120,6 +162,12 @@ do_custom_script() {
 
     for i in ${patch_folder_list[@]}
     do
+        retval=`is_excluded_patch "$i"`
+        if [ "$retval" == "true" ]
+        then
+            echo "Exclude patch $i"
+            continue
+        fi
         if [ -f $i/custom.sh ]
         then
             cd $i
@@ -174,7 +222,7 @@ make_it() {
 get_pkg_arch_from_config()
 {
 	config_file_path="$1"
-	cat .config | grep "^CONFIG_TARGET_ARCH_PACKAGES" | sed 's/^.*="\(.*\)"/\1/g'
+	cat $config_file_path | grep "^CONFIG_TARGET_ARCH_PACKAGES" | sed 's/^.*="\(.*\)"/\1/g'
 }
 
 move_built() {
@@ -227,6 +275,7 @@ clear_stage() {
 
 clear_dist() {
     clear_stage
+    rm -rf $SLIM_CFG_TOP_DIR/downloaded
     rm -rf $SLIM_CFG_TOP_DIR/*-src
 }
 

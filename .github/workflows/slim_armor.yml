@@ -14,7 +14,7 @@ jobs:
     runs-on: ubuntu-20.04
     strategy:
       matrix:
-        slim_profile: ['slim', 'r1cl']
+        slim_profile: ['slim', 'r1cl', 'official']
 
     steps:
     - name: Start job for profiles
@@ -40,7 +40,15 @@ jobs:
         cd $GITHUB_WORKSPACE/slim-wrt
         echo "build with profile ${{ matrix.slim_profile }}"
         make SLIM_CFG_PROFILE=${{ matrix.slim_profile }} showtime
-        
+
+    - name: Show vermagic and kernel config
+      run: |
+        set -x
+        cd $GITHUB_WORKSPACE/slim-wrt
+        find ./ -name .vermagic -exec cat {} \;
+        find ./ -name .config.set -exec cat {} \;
+
+
     - name: Show outputs and zip ipks
       run: |
         df -h

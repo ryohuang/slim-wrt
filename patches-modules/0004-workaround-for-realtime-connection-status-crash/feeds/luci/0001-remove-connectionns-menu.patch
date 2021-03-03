@@ -1,0 +1,17 @@
+--- a/modules/luci-mod-status/root/usr/share/luci/menu.d/luci-mod-status.json
++++ b/modules/luci-mod-status/root/usr/share/luci/menu.d/luci-mod-status.json
+@@ -90,14 +90,5 @@
+ 		"depends": {
+ 			"uci": { "wireless": { "@wifi-device": true } }
+ 		}
+-	},
+-
+-	"admin/status/realtime/connections": {
+-		"title": "Connections",
+-		"order": 4,
+-		"action": {
+-			"type": "view",
+-			"path": "status/connections"
+-		}
+ 	}
+ }
