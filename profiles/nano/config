@@ -68,3 +68,5 @@ CONFIG_FEED_diskman=m
 
 CONFIG_PACKAGE_slim-localization=m
 CONFIG_PACKAGE_luci-app-diskman=m
+
+CONFIG_IB_STANDALONE=y
