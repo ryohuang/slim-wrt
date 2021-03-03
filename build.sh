@@ -207,7 +207,8 @@ prepare_stage() {
     if [ -f $SLIM_CFG_PROFILE_DIR/appendconfig ]
     then
         cat $SLIM_CFG_PROFILE_DIR/appendconfig >> $SLIM_CFG_WORK_PATH/.config
-    fi 
+    fi
+    cd $SLIM_CFG_TOP_DIR
     # Replace ##SLIMVERSIONTAG with current tag or git hash
     # A gittag should be v19.07.7-21030301
     # v: means version
