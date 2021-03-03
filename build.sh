@@ -196,7 +196,6 @@ clear_patches() {
 
 # do the stuff before showtime
 prepare_stage() {
-    # add custom feed and install it. 
     if [ -f $SLIM_CFG_PROFILE_DIR/config ]
     then
         cp -fr $SLIM_CFG_PROFILE_DIR/config $SLIM_CFG_WORK_PATH/.config
@@ -209,6 +208,21 @@ prepare_stage() {
     then
         cat $SLIM_CFG_PROFILE_DIR/appendconfig >> $SLIM_CFG_WORK_PATH/.config
     fi 
+    # Replace ##SLIMVERSIONTAG with current tag or git hash
+    # A gittag should be v19.07.7-21030301
+    # v: means version
+    # 19.07.7: means openwrt branch
+    # 210303: means 2021-03-03 (year-mon-day)
+    # 01: means release number
+    sample="v19.07.7-21030301"
+    gittag=$( git describe --tags )
+    githash=$( git rev-parse HEAD | cut -b 1-7 )
+    if [ ${#sample} == ${#gittag} ]
+    then
+        sed  -i "s/##SLIMVERSIONTAG/$gittag/g" $SLIM_CFG_WORK_PATH/.config
+    else
+        sed  -i "s/##SLIMVERSIONTAG/$githash/g" $SLIM_CFG_WORK_PATH/.config
+    fi
     cd $SLIM_CFG_TOP_DIR
 }
 
