@@ -27,6 +27,14 @@ jobs:
         fetch-depth: '0'
         submodules: 'recursive'
         
+    - name: Set env
+      run: echo "RELEASE_VERSION=${GITHUB_REF#refs/*/}" >> $GITHUB_ENV
+    - name: Check RELEASE_VERSION
+      run: |
+        set -ex
+        echo $RELEASE_VERSION
+        echo ${{ env.RELEASE_VERSION }}
+
     - name: Install build tools
       env:
         DEBIAN_FRONTEND: noninteractive
