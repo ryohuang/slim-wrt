@@ -215,9 +215,16 @@ prepare_stage() {
     # 19.07.7: means openwrt branch
     # 210303: means 2021-03-03 (year-mon-day)
     # 01: means release number
-    gittag=$( git describe --always )
-    sed  -i "s/##SLIMVERSIONTAG/$gittag/g" $SLIM_CFG_WORK_PATH/.config
-
+    
+    # if RELEASE_VERSION starts with "v"
+    if [[ $RELEASE_VERSION == v* ]] ;
+    then
+        sed  -i "s/##SLIMVERSIONTAG/$RELEASE_VERSION/g" $SLIM_CFG_WORK_PATH/.config
+    else
+        gittag=$( git describe --always )
+        sed  -i "s/##SLIMVERSIONTAG/$gittag/g" $SLIM_CFG_WORK_PATH/.config
+    fi
+    
     cd $SLIM_CFG_TOP_DIR
 }
 
