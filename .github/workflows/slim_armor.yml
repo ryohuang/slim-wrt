@@ -1,6 +1,6 @@
 # This is a basic workflow that is manually triggered
 
-name: Build with default profile - "slim"
+name: Slim-Openwrt auto builder
 
 
 on:
@@ -24,6 +24,8 @@ jobs:
       with:
         repository: 'ryohuang/slim-wrt'
         path: 'slim-wrt'
+        fetch-depth: '0'
+        submodules: 'recursive'
         
     - name: Install build tools
       env:
@@ -34,6 +36,11 @@ jobs:
         sudo apt-get install -qqy --no-install-recommends build-essential asciidoc binutils bzip2 gawk gettext git libncurses5-dev libz-dev patch unzip zlib1g-dev lib32gcc1 libc6-dev-i386 subversion flex uglifyjs git-core gcc-multilib p7zip p7zip-full msmtp libssl-dev texinfo npm python-is-python3 ssh-client wget curl file screen && \
         sudo apt-get clean && \
         sudo rm -rf /var/lib/apt/lists/*
+
+    - name: Show git tag 
+      run: |
+        cd $GITHUB_WORKSPACE/slim-wrt
+        git describe --always
 
     - name: Showtime 
       run: |
