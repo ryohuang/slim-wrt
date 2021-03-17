@@ -17,7 +17,9 @@ CONFIG_FEED_diskman=m
 CONFIG_PACKAGE_slim-localization=y
 CONFIG_PACKAGE_luci-app-diskman=y
 
+# lxc configs
 CONFIG_KERNEL_CGROUPS=y
 CONFIG_KERNEL_NAMESPACES=y
 CONFIG_KERNEL_LXC_MISC=y
 CONFIG_PACKAGE_kmod-veth=y
+CONFIG_PACKAGE_kmod-fuse=y

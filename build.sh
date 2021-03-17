@@ -250,6 +250,8 @@ move_built() {
         rm -rf $img_dst
     fi
     mkdir -p $img_dst
+    # copy .config 
+    cp $SLIM_CFG_WORK_PATH/.config $img_dst/full-config
     # list built files
     cd $SLIM_CFG_WORK_PATH/bin/targets/$SLIM_CFG_TARGET/$SLIM_CFG_ARCH
     for i in `ls`
